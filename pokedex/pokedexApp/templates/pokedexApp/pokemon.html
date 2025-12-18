@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokemon</title>
+    <link rel="stylesheet" href="{% static 'pokedexApp/styles.css' %}">
+</head>
+<body>
+<header>
+  <div class="container">
+    <h1>Pokedex</h1>
+  </div>
+</header>
+<div class="container pokemon-detail">
+{% if pokemon %}
+    <h1>pokemon numero {{ pokemon.number }} : <b>{{ pokemon.name }}</b></h1>
+    <h3>type: {{ pokemon.typePokemon }}</h3>
+    {% if pokemon.description %}
+    <p>{{ pokemon.description }}</p>
+    {% endif %}
+    {% if pokemon.image %}
+    <img src="{{ pokemon.image }}" alt="{{ pokemon.name }} image" />
+    {% endif %}
+{% else %}
+    <h1> pokemon numero {{ number }} : <b> {{ name }}</b></h1>
+    <h3>type: {{ type }}</h3>
+{% endif %}
+
+<p><a class="back-link" href="/">Retour</a></p>
+</div>
+</body>
+</html>

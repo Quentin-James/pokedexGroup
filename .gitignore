@@ -1,0 +1,1 @@
+ C:\git\Python\pokedex; Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process; .\.venv\Scripts\Activate.ps1; python manage.py runserver 8000

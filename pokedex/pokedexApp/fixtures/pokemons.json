@@ -1,0 +1,35 @@
+[
+  {
+    "model": "pokedexApp.pokemon",
+    "pk": 1,
+    "fields": {
+      "number": 1,
+      "name": "Bulbasaur",
+      "typePokemon": "Grass/Poison",
+      "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+      "description": "Seed Pokémon — A strange seed was planted on its back at birth."
+    }
+  },
+  {
+    "model": "pokedexApp.pokemon",
+    "pk": 25,
+    "fields": {
+      "number": 25,
+      "name": "Pikachu",
+      "typePokemon": "Electric",
+      "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
+      "description": "Mouse Pokémon — It stores electricity in its cheeks."
+    }
+  },
+  {
+    "model": "pokedexApp.pokemon",
+    "pk": 150,
+    "fields": {
+      "number": 150,
+      "name": "Mewtwo",
+      "typePokemon": "Psychic",
+      "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png",
+      "description": "Genetic Pokémon — It was created by a scientist after years of horrific gene splicing experiments."
+    }
+  }
+]
