@@ -61,12 +61,25 @@ def fetch_pokemon_data(pokemon_id):
                 description = entry.get('flavor_text', '').replace('\n', ' ').replace('\f', ' ')
                 break
 
+    # base stats
+    stats_map = {}
+    for stat in pdata.get('stats', []):
+        key = stat.get('stat', {}).get('name')
+        if key:
+            stats_map[key] = stat.get('base_stat', 0)
+
     return {
         'number': int(pokemon_id),
         'name': name.title() if name else '',
         'typePokemon': type_str.title(),
         'image': image or '',
         'description': description,
+        'hp': stats_map.get('hp', 0),
+        'attack': stats_map.get('attack', 0),
+        'defense': stats_map.get('defense', 0),
+        'special_attack': stats_map.get('special-attack', 0),
+        'special_defense': stats_map.get('special-defense', 0),
+        'speed': stats_map.get('speed', 0),
     }
 
 
@@ -88,6 +101,12 @@ def fetch_and_create_pokemon(pokemon_id, model_class):
             'typePokemon': data['typePokemon'],
             'image': data['image'],
             'description': data['description'][:200],
+            'hp': data['hp'],
+            'attack': data['attack'],
+            'defense': data['defense'],
+            'special_attack': data['special_attack'],
+            'special_defense': data['special_defense'],
+            'speed': data['speed'],
         }
     )
     return obj

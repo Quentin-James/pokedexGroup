@@ -10,12 +10,24 @@
 <header>
   <div class="container">
     <h1>Pokedex</h1>
+    <nav>
+      <a href="/" class="nav-link">Accueil</a>
+      <a href="{% url 'formation' %}" class="nav-link">Formation</a>
+    </nav>
   </div>
 </header>
 <div class="container pokemon-detail">
 {% if pokemon %}
     <h1>pokemon numero {{ pokemon.number }} : <b>{{ pokemon.name }}</b></h1>
     <h3>type: {{ pokemon.typePokemon }}</h3>
+    <ul class="stat-block">
+      <li>HP : {{ pokemon.hp }}</li>
+      <li>Attaque : {{ pokemon.attack }}</li>
+      <li>Defense : {{ pokemon.defense }}</li>
+      <li>Attaque spe : {{ pokemon.special_attack }}</li>
+      <li>Defense spe : {{ pokemon.special_defense }}</li>
+      <li>Vitesse : {{ pokemon.speed }}</li>
+    </ul>
     {% if pokemon.description %}
     <p>{{ pokemon.description }}</p>
     {% endif %}

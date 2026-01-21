@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Formation des equipes</title>
+    <link rel="stylesheet" href="{% static 'pokedexApp/styles.css' %}">
+</head>
+<body>
+<header>
+  <div class="container header-bar">
+    <h1>Pokedex - Formation</h1>
+    <nav>
+      <a href="/" class="nav-link">Accueil</a>
+    </nav>
+  </div>
+</header>
+<div class="container">
+  <div class="messages">
+    {% for e in errors %}<div class="alert error">{{ e }}</div>{% endfor %}
+    {% for m in infos %}<div class="alert info">{{ m }}</div>{% endfor %}
+  </div>
+
+  <div class="team-wrapper">
+    <div class="team-card">
+      <div class="team-title">Equipe A ({{ team_a|length }}/5)</div>
+      <div class="team-actions">
+        <form method="post" class="inline-form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="clear">
+          <input type="hidden" name="team" value="A">
+          <button type="submit" class="secondary">Vider</button>
+        </form>
+      </div>
+      <div class="team-list">
+        {% for p in team_a %}
+        <div class="team-row">
+          <div>
+            <strong>#{{ p.number }} {{ p.name }}</strong>
+            <div class="stat-line">HP {{ p.hp }} | Atk {{ p.attack }} | Def {{ p.defense }} | SpA {{ p.special_attack }} | SpD {{ p.special_defense }} | Spe {{ p.speed }}</div>
+          </div>
+          <form method="post" class="inline-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="remove">
+            <input type="hidden" name="team" value="A">
+            <input type="hidden" name="pokemon_id" value="{{ p.number }}">
+            <button type="submit" class="ghost">Retirer</button>
+          </form>
+        </div>
+        {% empty %}
+        <p>Aucun pokemon dans l'equipe.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-title">Equipe B ({{ team_b|length }}/5)</div>
+      <div class="team-actions">
+        <form method="post" class="inline-form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="clear">
+          <input type="hidden" name="team" value="B">
+          <button type="submit" class="secondary">Vider</button>
+        </form>
+        <form method="post" class="inline-form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="ai_fill">
+          <button type="submit" class="secondary">Generer equipe IA</button>
+        </form>
+      </div>
+      <div class="team-list">
+        {% for p in team_b %}
+        <div class="team-row">
+          <div>
+            <strong>#{{ p.number }} {{ p.name }}</strong>
+            <div class="stat-line">HP {{ p.hp }} | Atk {{ p.attack }} | Def {{ p.defense }} | SpA {{ p.special_attack }} | SpD {{ p.special_defense }} | Spe {{ p.speed }}</div>
+          </div>
+          <form method="post" class="inline-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="remove">
+            <input type="hidden" name="team" value="B">
+            <input type="hidden" name="pokemon_id" value="{{ p.number }}">
+            <button type="submit" class="ghost">Retirer</button>
+          </form>
+        </div>
+        {% empty %}
+        <p>Aucun pokemon dans l'equipe.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="battle-bar">
+    <form method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="battle">
+      <button type="submit" class="primary">Lancer le combat</button>
+    </form>
+  </div>
+
+  {% if battle %}
+  <div class="battle-result">
+    <h2>{{ battle.winner_text }} ({{ battle.score_a }} - {{ battle.score_b }})</h2>
+    <div class="rounds">
+      {% for r in battle.rounds %}
+      <div class="round-row">
+        <div class="round-index">Manche {{ r.index }}</div>
+        <div class="round-detail">
+          <div class="side">A: {% if r.a %}#{{ r.a.number }} {{ r.a.name }}{% else %}-{% endif %}</div>
+          <div class="side">B: {% if r.b %}#{{ r.b.number }} {{ r.b.name }}{% else %}-{% endif %}</div>
+        </div>
+        <div class="round-winner">{{ r.winner }} ({{ r.reason }})</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="formation-grid">
+    <div class="grid-header">
+      <h2>Ajouter des pokemons</h2>
+      <form method="get" class="search-form">
+        <input type="text" name="q" placeholder="Rechercher" value="{{ q }}">
+        <button type="submit">Filtrer</button>
+      </form>
+    </div>
+    <div class="pokemon-grid">
+      {% for p in page_obj.object_list %}
+      <div class="pokemon-card">
+        {% if p.image %}
+        <img src="{{ p.image }}" alt="{{ p.name }}">
+        {% else %}
+        <img src="https://via.placeholder.com/96" alt="no image">
+        {% endif %}
+        <div class="pokemon-name">#{{ p.number }} {{ p.name }}</div>
+        <div class="pokemon-type">{{ p.typePokemon }}</div>
+        <div class="add-actions">
+          <form method="post" class="inline-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="team" value="A">
+            <input type="hidden" name="pokemon_id" value="{{ p.number }}">
+            <button type="submit">Ajouter A</button>
+          </form>
+          <form method="post" class="inline-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="team" value="B">
+            <input type="hidden" name="pokemon_id" value="{{ p.number }}">
+            <button type="submit">Ajouter B</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?q={{ q }}&page={{ page_obj.previous_page_number }}">Précédent</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?q={{ q }}&page={{ page_obj.next_page_number }}">Suivant</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+</body>
+</html>
